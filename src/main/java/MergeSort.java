@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class MergeSort {
     void merge(int[] arr, int l, int m, int r) {
         int lengthOfFirst = m - l + 1;
@@ -7,8 +9,7 @@ public class MergeSort {
         int[] L = new int[lengthOfFirst];
         int[] R = new int[lengthOfSecond];
 
-        for (int i = 0; i < lengthOfFirst; ++i)
-            L[i] = arr[l + i];
+        System.arraycopy(arr, l + 0, L, 0, lengthOfFirst);
         for (int j = 0; j < lengthOfSecond; ++j)
             R[j] = arr[m + 1 + j];
 
@@ -51,24 +52,34 @@ public class MergeSort {
         }
     }
 
-    static void printArray(int arr[]) {
-        int n = arr.length;
-        for (int i = 0; i < n; ++i)
-            System.out.print(arr[i] + " ");
-        System.out.println();
+
+    //тестовый метод
+    void testAlgorithm(int[] currentArray){
+        int[] notChangedArray = currentArray.clone();
+        int[] expectedArray = currentArray.clone();
+        Arrays.sort(expectedArray); //нативный метод сортировки класса Array - dual pivot quicksort
+
+        this.sort(currentArray, 0, currentArray.length - 1);
+
+        System.out.printf("\n unsorted array\t%s \n sorted array\t%s%n",
+                Arrays.toString(notChangedArray), Arrays.toString(currentArray));
+
+        if(! Arrays.equals(expectedArray, currentArray)){
+            System.out.printf
+                    ("failed:\n \t actual = %s\n \t excepted: %s%n",
+                            Arrays.toString(currentArray), Arrays.toString(expectedArray));
+        }
     }
 
     // Тестирование
-    public static void main(String args[]) {
-        int arr[] = { 12, 11, 13, 5, 6, 7 };
-
-        System.out.println("Исходный массив:");
-        printArray(arr);
-
-        MergeSort ob = new MergeSort();
-        ob.sort(arr, 0, arr.length - 1);
-
-        System.out.println("\nОтсортированный массив:");
-        printArray(arr);
+    public static void main(String[] args) {
+        MergeSort test = new MergeSort();
+        test.testAlgorithm(new int[]{});
+        test.testAlgorithm(new int[]{1});
+        test.testAlgorithm(new int[]{1, 10});
+        test.testAlgorithm(new int[]{10, 1});
+        test.testAlgorithm(new int[]{ -10, -1 });
+        test.testAlgorithm(new int[]{ -10, 1, 10, -1 });
+        test.testAlgorithm(new int[]{ 3, 2, -3, 1, -2, 0, -1});
     }
 }
